@@ -16,6 +16,7 @@ public class PlayerMovement : MonoBehaviour
     Vector3 direction;
     Vector3 _aim;
     bool _isRunning;
+    bool _isAttack;
 
     private void Reset()
     {
@@ -25,14 +26,42 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
+        //move
         _moveInput.action.started += StartMove;
         _moveInput.action.performed += StartMove;/*on utilise performed pour savoir ou en est le joystick ou le bouton ,
                                                   * du coup ici on le met dans startmove pour avoir le bouton haut et gauche par exemple appuyé ensemble pour faire une diagonale. */
         _moveInput.action.canceled += EndMove;
-
+        
+        //sprint
         _sprint.action.started += SprintStart;
         _sprint.action.canceled += SprintEnd;
+
+        //attack
+        _attack.action.started += StartAttack;
+        _attack.action.performed += UpdateAttack;
+        _attack.action.canceled += EndAttack;
     }
+
+
+
+    private void StartAttack(InputAction.CallbackContext obj)
+    {
+        
+    }
+
+
+    private void UpdateAttack(InputAction.CallbackContext obj)
+    {
+        
+    }
+
+
+    private void EndAttack(InputAction.CallbackContext obj)
+    {
+        
+    }
+
+
 
     private void FixedUpdate()
     {
