@@ -14,7 +14,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float _fastForward;
 
     Vector3 direction;
-    bool _isWalked;
+    Vector3 _aim;
+    bool _isRunning;
 
     private void Reset()
     {
@@ -35,26 +36,29 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        _animator.SetBool("IsWalked", _isWalked);
+        _animator.SetBool("IsRunning", _isRunning);
+        _animator.SetBool("IsWalking", direction.magnitude > 0.1f);
+        _animator.SetFloat("Horizontal", _aim.x);
+        _animator.SetFloat("Vertical", _aim.y);
 
-        if (_isWalked)
-        {
-            _rb.MovePosition(transform.position + (direction  * Time.fixedDeltaTime* _speed));
-        }
-        else
+        if (_isRunning)
         {
             _rb.MovePosition(transform.position + (direction  * Time.fixedDeltaTime* (_speed * _fastForward)));
         }
+        else
+        {
+            _rb.MovePosition(transform.position + (direction  * Time.fixedDeltaTime* _speed));
+        }
+        
 
     }
-
 
     private void StartMove(InputAction.CallbackContext obj)
     {
         Debug.Log("J'ai bougé");
         direction = obj.ReadValue<Vector2>(); //on lit la direction du bouton/joystick/....
+        _aim = direction;
     }
-    
     
     private void EndMove(InputAction.CallbackContext obj)
     {
@@ -64,11 +68,11 @@ public class PlayerMovement : MonoBehaviour
     private void SprintStart(InputAction.CallbackContext obj)
     {
         Debug.Log("Cours FOREST !!! COOUUUUUUURRRRTTTTT");
-        _isWalked = true;
+        _isRunning = true;
     }
     private void SprintEnd(InputAction.CallbackContext obj)
     {
         Debug.Log("STOOOOOOOOPPPPP");
-        _isWalked = false;
+        _isRunning = false;
     }
 }
