@@ -6,8 +6,9 @@ using UnityEngine.InputSystem;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] InputActionReference _moveInput;
-    [SerializeField] InputActionReference _attack;
-    [SerializeField] InputActionReference _sprint;
+    [SerializeField] InputActionReference _attackInput;
+    [SerializeField] InputActionReference _sprintInput;
+    [SerializeField] InputActionReference _actionInput;
     [SerializeField] Animator _animator;
     [SerializeField] Rigidbody2D _rb;
     [SerializeField] float _speed;
@@ -33,32 +34,17 @@ public class PlayerMovement : MonoBehaviour
         _moveInput.action.canceled += EndMove;
         
         //sprint
-        _sprint.action.started += SprintStart;
-        _sprint.action.canceled += SprintEnd;
+        _sprintInput.action.started += SprintStart;
+        _sprintInput.action.canceled += SprintEnd;
 
         //attack
-        _attack.action.started += StartAttack;
-        _attack.action.performed += UpdateAttack;
-        _attack.action.canceled += EndAttack;
-    }
+        _attackInput.action.started += StartAttack;
+        _attackInput.action.performed += StartAttack;
+        _attackInput.action.canceled += EndAttack;
 
-
-
-    private void StartAttack(InputAction.CallbackContext obj)
-    {
-        
-    }
-
-
-    private void UpdateAttack(InputAction.CallbackContext obj)
-    {
-        
-    }
-
-
-    private void EndAttack(InputAction.CallbackContext obj)
-    {
-        
+        //action
+        _actionInput.action.started += BeginInteraction;
+        _actionInput.action.canceled += EndInteraction;
     }
 
 
@@ -69,6 +55,7 @@ public class PlayerMovement : MonoBehaviour
         _animator.SetBool("IsWalking", direction.magnitude > 0.1f);
         _animator.SetFloat("Horizontal", _aim.x);
         _animator.SetFloat("Vertical", _aim.y);
+        _animator.SetBool("IsAttack", _isAttack);
 
         if (_isRunning)
         {
@@ -78,7 +65,6 @@ public class PlayerMovement : MonoBehaviour
         {
             _rb.MovePosition(transform.position + (direction  * Time.fixedDeltaTime* _speed));
         }
-        
 
     }
 
@@ -98,10 +84,38 @@ public class PlayerMovement : MonoBehaviour
     {
         Debug.Log("Cours FOREST !!! COOUUUUUUURRRRTTTTT");
         _isRunning = true;
+        //_isAttack = true;
     }
     private void SprintEnd(InputAction.CallbackContext obj)
     {
         Debug.Log("STOOOOOOOOPPPPP");
         _isRunning = false;
+        //_isAttack = false;
+    }
+
+
+    private void StartAttack(InputAction.CallbackContext obj)
+    {
+        Debug.Log("J'ai attaqué");
+        _isAttack = true;
+    }
+
+
+    private void EndAttack(InputAction.CallbackContext obj)
+    {
+        Debug.Log("J'ai fini mon attaque");
+        _isAttack = false;
+    }
+
+
+    private void BeginInteraction(InputAction.CallbackContext obj)
+    {
+        Debug.Log("J'ai fais une action");
+    }
+
+
+    private void EndInteraction(InputAction.CallbackContext obj)
+    {
+        Debug.Log("J'ai fini mon action");   
     }
 }
