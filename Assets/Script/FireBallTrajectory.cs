@@ -15,6 +15,6 @@ public class FireBallTrajectory : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        GameObject.Destroy(gameObject);
+        Destroy(gameObject);
     }
 }

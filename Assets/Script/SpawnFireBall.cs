@@ -9,31 +9,43 @@ public class SpawnFireBall : MonoBehaviour
     [SerializeField] GameObject _fireBall;
     [SerializeField] Transform _spawnPoint;
     [SerializeField] Animator _animator;
+    [SerializeField] float _cooldown;
 
     bool _isAttack2;
+    [SerializeField] float _timer;
 
     private void Start()
     {
         //attack2
-        _secondAttackInput.action.started += StartAttack2; ;
-        _secondAttackInput.action.performed += StartAttack2;
+        _secondAttackInput.action.started += StartAttack2;
         _secondAttackInput.action.canceled += EndAttack2;
     }
+
+
     private void FixedUpdate()
     {
         _animator.SetBool("IsAttack2", _isAttack2);
-        
-        
-        if (_isAttack2)
+
+        if(_timer > 0)
         {
-            GameObject.Instantiate(_fireBall, _spawnPoint.position, _spawnPoint.rotation);
+            _timer -= Time.fixedDeltaTime;
+        }
+
+        if(_secondAttackInput.action.IsPressed())
+        {
+            StartAttack2();
         }
     }
 
-    private void StartAttack2(InputAction.CallbackContext obj)
+    private void StartAttack2(InputAction.CallbackContext obj) => StartAttack2();
+    private void StartAttack2()
     {
+        if (_timer > 0) return;
+
         Debug.Log("J'ai attaqué : attaque 2");
         _isAttack2 = true;
+        GameObject.Instantiate(_fireBall, _spawnPoint.position, _spawnPoint.rotation);
+        _timer = _cooldown;
     }
 
     private void EndAttack2(InputAction.CallbackContext obj)
