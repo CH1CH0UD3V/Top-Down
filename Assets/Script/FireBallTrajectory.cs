@@ -10,7 +10,7 @@ public class FireBallTrajectory : MonoBehaviour
 
     private void Start()
     {
-        _rb.AddForce(_direction * Time.fixedDeltaTime * _speed);
+        _rb.AddForce(_direction * Time.fixedDeltaTime * _speed, (ForceMode2D)Space.World);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

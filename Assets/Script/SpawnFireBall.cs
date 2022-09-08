@@ -44,7 +44,7 @@ public class SpawnFireBall : MonoBehaviour
 
         Debug.Log("J'ai attaqué : attaque 2");
         _isAttack2 = true;
-        GameObject.Instantiate(_fireBall, _spawnPoint.position, _spawnPoint.rotation);
+        GameObject.Instantiate(_fireBall, _spawnPoint.position, _spawnPoint.rotation, _spawnPoint);
         _timer = _cooldown;
     }
 
